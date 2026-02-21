@@ -2,27 +2,76 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { FiSun, FiMoon } from "react-icons/fi";
 
 const links = [
   { name: "Home", id: "home" },
   { name: "About", id: "about" },
   { name: "Skills", id: "skills" },
+  { name: "Projects", id: "projects" },
   { name: "Contact", id: "contact" }
 ];
 
 export default function Navbar() {
 
   const [active, setActive] = useState("home");
+  const [theme, setTheme] = useState("dark");
+
+  /* ================= THEME INIT ================= */
+
+  useEffect(() => {
+
+  const savedTheme = localStorage.getItem("theme") || "dark";
+
+  setTheme(savedTheme);
+
+  if (savedTheme === "dark") {
+    document.documentElement.classList.add("dark");
+    document.body.style.backgroundColor = "black";
+    document.body.style.color = "white";
+  } else {
+    document.body.style.backgroundColor = "white";
+    document.body.style.color = "black";
+  }
+
+}, []);
+
+  /* ================= THEME TOGGLE ================= */
+
+ const toggleTheme = () => {
+
+  const newTheme = theme === "dark" ? "light" : "dark";
+
+  setTheme(newTheme);
+
+  localStorage.setItem("theme", newTheme);
+
+  if (newTheme === "dark") {
+    document.documentElement.classList.add("dark");
+    document.body.style.backgroundColor = "black";
+    document.body.style.color = "white";
+  } else {
+    document.documentElement.classList.remove("dark");
+    document.body.style.backgroundColor = "white";
+    document.body.style.color = "black";
+  }
+
+};
+
+
+  /* ================= SCROLL SPY ================= */
 
   useEffect(() => {
 
     const observer = new IntersectionObserver(
       (entries) => {
+
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             setActive(entry.target.id);
           }
         });
+
       },
       {
         threshold: 0.6
@@ -44,7 +93,7 @@ export default function Navbar() {
       fixed top-0 left-0 right-0
       z-50
       backdrop-blur-md
-      bg-black/40
+      bg-black/40 dark:bg-black/40
       border-b border-gray-800
     ">
 
@@ -61,22 +110,16 @@ export default function Navbar() {
 
 
         {/* LINKS */}
-        <div className="flex gap-8 relative">
+        <div className="flex items-center gap-6">
 
           {links.map(link => (
 
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="
-                relative
-                text-sm
-                transition
-                px-1 py-1
-              "
+              className="relative px-1 py-1"
             >
 
-              {/* TEXT */}
               <span
                 className={
                   active === link.id
@@ -88,7 +131,6 @@ export default function Navbar() {
               </span>
 
 
-              {/* ANIMATED UNDERLINE */}
               {active === link.id && (
                 <motion.div
                   layoutId="underline"
@@ -110,6 +152,28 @@ export default function Navbar() {
             </a>
 
           ))}
+
+
+          {/* THEME TOGGLE */}
+          <button
+            onClick={toggleTheme}
+            className="
+              ml-2
+              w-10 h-10
+              flex items-center justify-center
+              rounded-full
+              border border-gray-700
+              hover:border-white
+              transition
+            "
+          >
+
+            {theme === "dark"
+              ? <FiSun size={18}/>
+              : <FiMoon size={18}/>
+            }
+
+          </button>
 
         </div>
 

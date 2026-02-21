@@ -4,24 +4,20 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
-  background-color: black;
-  color: white;
-}
-
-/* scroll snap container */
 .scroll-container {
   scroll-snap-type: y mandatory;
   height: 100vh;
   overflow-y: scroll;
 }
 
-/* each section */
 .scroll-section {
   min-height: 100vh;
   scroll-snap-align: start;
   padding-top: 80px;
 }
-html {
-  scroll-behavior: smooth;
+
+* {
+  transition: background-color 0.25s ease,
+              color 0.25s ease,
+              border-color 0.25s ease;
 }
